@@ -15,6 +15,7 @@ const questions = [
     {
         title: "Hvor stort kan vannopptaket til en stor bjørk bli på en varm dag med god tilgang på vann?",
         illustration: "./assets/bjork-og-vann.png",
+        illustrationTone: "yellow",
         alt: "En bjørk med vann tegnet i stammen og bakken.",
         answers: [
             "Rundt 5 liter på en dag",
@@ -27,6 +28,7 @@ const questions = [
     {
         title: "Hvilken del av treet tar opp vann fra bakken?",
         illustration: "./assets/bjork-og-vann.png",
+        illustrationTone: "yellow",
         alt: "En bjørk med vann tegnet i stammen og bakken.",
         answers: ["Røttene", "Bladene", "Barken"],
         correctAnswer: "a",
@@ -41,12 +43,16 @@ const form = document.querySelector("#quiz-form");
 const answers = document.querySelector("#answers");
 const answerTexts = answers.querySelectorAll(".quiz-answer-text");
 const illustration = document.querySelector("#illustration");
+const card = document.querySelector(".quiz-card");
+const cardFront = card.querySelector(".quiz-card-front");
 const feedback = document.querySelector("#feedback");
 const feedbackTitle = document.querySelector("#feedback-title");
 const feedbackExplanation = document.querySelector("#feedback-explanation");
 const submitButton = document.querySelector("#submit-answer");
 const nextButton = document.querySelector("#next-question");
+const nextButtonLabel = document.querySelector("#next-question-label");
 const resultScreen = document.querySelector("#result-screen");
+const resultCard = resultScreen.querySelector(".quiz-result-card");
 const resultTitle = document.querySelector("#result-title");
 const resultMessage = document.querySelector("#result-message");
 const retryButton = document.querySelector("#try-again");
@@ -54,11 +60,34 @@ const retryButton = document.querySelector("#try-again");
 const winScore = 2;
 let questionIndex = 0;
 let score = 0;
+let stepAnimation;
 
 progress.setAttribute("aria-valuemin", "0");
 progress.setAttribute("aria-valuemax", questions.length);
 const progressSegments = questions.map(() => document.createElement("span"));
 progress.append(...progressSegments);
+
+const updateLeafMotion = createResultLeafAnimation(resultScreen);
+const reducedQuizMotion = matchMedia("(prefers-reduced-motion: reduce)");
+
+function updateProgress(answeredCount) {
+    progress.setAttribute("aria-valuenow", answeredCount);
+    progress.setAttribute("aria-valuetext", `${answeredCount} av ${questions.length} spørsmål besvart`);
+    progressSegments.forEach((segment, index) => {
+        segment.classList.toggle("is-complete", index < answeredCount);
+        segment.classList.toggle("is-current", index === answeredCount);
+    });
+}
+
+function revealStep(element) {
+    stepAnimation?.cancel();
+    if (reducedQuizMotion.matches) return;
+
+    stepAnimation = element.animate([
+        { opacity: 0.6, transform: "translateY(6px)" },
+        { opacity: 1, transform: "translateY(0)" },
+    ], { duration: 180, easing: "cubic-bezier(0.2, 0.75, 0.25, 1)" });
+}
 
 function showQuestion() {
     const question = questions[questionIndex];
@@ -66,6 +95,7 @@ function showQuestion() {
     questionTitle.textContent = question.title;
     illustration.src = question.illustration;
     illustration.alt = question.alt;
+    card.dataset.illustrationTone = question.illustrationTone ?? "green";
     answerTexts.forEach((text, index) => {
         text.textContent = question.answers[index];
     });
@@ -74,19 +104,21 @@ function showQuestion() {
     const markedOption = answers.querySelector(".quiz-option[data-result]");
     if (markedOption) delete markedOption.dataset.result;
     answers.disabled = false;
-    illustration.hidden = false;
-    feedback.hidden = true;
+    card.classList.remove("is-flipped");
+    cardFront.inert = false;
+    feedback.inert = true;
+    feedbackTitle.textContent = "";
+    feedbackExplanation.textContent = "";
+    delete feedback.dataset.result;
     submitButton.hidden = false;
     nextButton.hidden = true;
 
-    progress.setAttribute("aria-valuenow", questionIndex + 1);
-    progress.setAttribute("aria-valuetext", `Spørsmål ${questionIndex + 1} av ${questions.length}`);
-    progressSegments.forEach((segment, index) => {
-        segment.classList.toggle("is-active", index <= questionIndex);
-    });
+    updateProgress(questionIndex);
 
     resultScreen.hidden = true;
+    updateLeafMotion();
     questionScreen.hidden = false;
+    revealStep(questionScreen);
 }
 
 function showResult() {
@@ -96,10 +128,10 @@ function showResult() {
     resultMessage.textContent = didWin
         ? "Godt jobbet! Nå kjenner du flere av naturens viktige egenskaper."
         : "Her er det mer å lære om naturen. Prøv gjerne én gang til!";
-    progress.setAttribute("aria-valuetext", "Alle spørsmål besvart");
-
     questionScreen.hidden = true;
     resultScreen.hidden = false;
+    updateLeafMotion();
+    revealStep(resultCard);
     resultTitle.focus();
 }
 
@@ -121,12 +153,14 @@ form.addEventListener("submit", (event) => {
         : `Feil svar. Riktig svar er ${question.correctAnswer.toUpperCase()}.`;
     feedbackExplanation.textContent = question.explanation;
 
-    illustration.hidden = true;
-    feedback.hidden = false;
+    card.classList.add("is-flipped");
+    cardFront.inert = true;
+    feedback.inert = false;
     answers.disabled = true;
     submitButton.hidden = true;
-    nextButton.textContent = questionIndex + 1 === questions.length ? "Se resultat" : "Neste spørsmål";
+    nextButtonLabel.textContent = questionIndex + 1 === questions.length ? "Se resultat" : "Neste spørsmål";
     nextButton.hidden = false;
+    updateProgress(questionIndex + 1);
     feedback.focus();
 });
 

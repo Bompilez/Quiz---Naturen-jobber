@@ -2,9 +2,14 @@
 <html lang="nb">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&amp;display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
+    <script src="./result-leaves.js" defer></script>
     <script src="./script.js" defer></script>
+    <script src="./frame-resize.js" defer></script>
     <title>Naturen jobber – quiz</title>
 </head>
 <body>
@@ -14,18 +19,22 @@
             <div id="quiz-progress" class="quiz-progress" role="progressbar" aria-label="Quizfremdrift"></div>
         </header>
 
-        <section id="question-screen" aria-labelledby="question" hidden>
-            <h1 id="question" tabindex="-1"></h1>
+        <section id="question-screen" class="quiz-question" aria-labelledby="question" hidden>
+            <h1 id="question" class="quiz-question-title" tabindex="-1"></h1>
 
             <div class="quiz-card">
-                <img id="illustration" alt="" width="572" height="416">
-                <div id="feedback" class="quiz-feedback" role="group" aria-labelledby="feedback-title" aria-describedby="feedback-explanation" tabindex="-1" hidden>
-                    <h2 id="feedback-title"></h2>
-                    <p id="feedback-explanation"></p>
+                <div class="quiz-card-inner">
+                    <div class="quiz-card-front">
+                        <img id="illustration" alt="" width="572" height="416">
+                    </div>
+                    <div id="feedback" class="quiz-feedback" role="group" aria-labelledby="feedback-title" aria-describedby="feedback-explanation" tabindex="-1" inert>
+                        <h2 id="feedback-title"></h2>
+                        <p id="feedback-explanation"></p>
+                    </div>
                 </div>
             </div>
 
-            <form id="quiz-form">
+            <form id="quiz-form" class="quiz-question-panel">
                 <fieldset id="answers" class="quiz-answers" aria-label="Svaralternativer">
                     <label class="quiz-option">
                         <span class="quiz-letter">A</span>
@@ -45,14 +54,18 @@
                 </fieldset>
 
                 <button id="submit-answer" type="submit">Svar</button>
-                <button id="next-question" type="button" hidden>Neste spørsmål</button>
+                <button id="next-question" type="button" hidden><span id="next-question-label">Neste spørsmål</span> <span aria-hidden="true">→</span></button>
             </form>
         </section>
 
         <section id="result-screen" class="quiz-result" aria-labelledby="result-title" hidden>
-            <h1 id="result-title" tabindex="-1"></h1>
-            <p id="result-message"></p>
-            <button id="try-again" type="button">Prøv igjen</button>
+            <canvas class="quiz-result-leaves" aria-hidden="true"></canvas>
+            <div class="quiz-result-card">
+                <p class="quiz-name">Naturen jobber</p>
+                <h1 id="result-title" tabindex="-1"></h1>
+                <p id="result-message"></p>
+                <button id="try-again" type="button">Prøv igjen</button>
+            </div>
         </section>
     </main>
 </body>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="nb">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Naturen jobber i byen – testside</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f8f4;
+            color: #262a35;
+            font: 1rem/1.6 system-ui, sans-serif;
+        }
+
+        .wrap {
+            width: min(100% - 2rem, 62rem);
+            margin-inline: auto;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            background: #fff;
+            border-bottom: 1px solid #dfe3db;
+        }
+
+        .site-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.5rem 1.5rem;
+            padding-block: 0.75rem;
+        }
+
+        .site-nav a {
+            color: inherit;
+            text-underline-offset: 0.2em;
+        }
+
+        .site-name {
+            font-weight: 750;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+        }
+
+        .hero {
+            background: #e3efd9;
+            padding-block: clamp(3rem, 9vw, 7rem);
+        }
+
+        .hero h1 {
+            max-width: 15ch;
+            margin: 0 0 1rem;
+            font-size: clamp(2.25rem, 7vw, 4.5rem);
+            line-height: 1.05;
+        }
+
+        .hero p {
+            max-width: 48ch;
+            margin: 0;
+            font-size: clamp(1.06rem, 3vw, 1.3rem);
+        }
+
+        .content {
+            padding-block: clamp(2.5rem, 6vw, 4rem);
+        }
+
+        .content h2,
+        .quiz-section h2 {
+            margin: 0 0 0.75rem;
+            font-size: clamp(1.65rem, 4vw, 2.4rem);
+            line-height: 1.15;
+        }
+
+        .content p,
+        .quiz-section p {
+            max-width: 64ch;
+        }
+
+        .topics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .topic {
+            padding: 1.25rem;
+            border: 1px solid #dfe3db;
+            border-radius: 0.5rem;
+            background: #fff;
+        }
+
+        .topic h3 {
+            margin: 0;
+        }
+
+        .topic p {
+            margin: 0.5rem 0 0;
+        }
+
+        .quiz-section {
+            background: #e7ecff;
+            padding-block: clamp(2.5rem, 7vw, 4.5rem);
+        }
+
+        [id] {
+            scroll-margin-top: 7rem;
+        }
+
+        .site-footer {
+            background: #262a35;
+            color: #fff;
+            padding-block: 2rem;
+        }
+
+        .site-footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body id="topp">
+    <header class="site-header">
+        <nav class="site-nav wrap" aria-label="Hovedmeny">
+            <a class="site-name" href="#topp">Grønne byrom</a>
+            <div class="nav-links">
+                <a href="#natur">Bytrær</a>
+                <a href="#quiz">Quiz</a>
+                <a href="#videre">Nærmiljø</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <h1>Naturen jobber i byen</h1>
+                <p>Trær, parker og åpne grøfter gjør hverdagen i byen litt svalere og gir regnvannet flere steder å ta veien.</p>
+            </div>
+        </section>
+
+        <section id="natur" class="content wrap">
+            <h2>Det skjer mer under et tre enn du ser</h2>
+            <p>På en varm sommerdag merker du fort forskjellen på å stå i sola og å stå under en bred trekrone. Skyggen skjermer bakken, og når vann fordamper fra bladene, trekker det varme fra lufta omkring.</p>
+            <p>Trærne gir også ly og mat til fugler og insekter. Hvor mye nytte vi får av et bytre, henger blant annet sammen med hvor god plass røttene har, hvor stort treet får bli og hvor mye vann det har tilgang på.</p>
+
+            <div class="topics">
+                <article class="topic">
+                    <h3>På fortauet</h3>
+                    <p>En trerekke kan gi sammenhengende skygge langs en gate der mange går.</p>
+                </article>
+                <article class="topic">
+                    <h3>I parken</h3>
+                    <p>Plener og bed gir regnvannet mulighet til å trekke ned i jorda der det faller.</p>
+                </article>
+                <article class="topic">
+                    <h3>Rundt skolegården</h3>
+                    <p>Samlinger av trær og busker kan gi både ly for vinden og steder å oppholde seg i skyggen.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="quiz" class="quiz-section">
+            <div class="wrap">
+                <h2>Hva kan du om bytrær?</h2>
+                <p>Prøv tre spørsmål om skygge, vann og røtter.</p>
+                <script src="./embed-overlay.js"></script>
+            </div>
+        </section>
+
+        <section id="videre" class="content wrap">
+            <h2>Se etter naturen der du bor</h2>
+            <p>Neste gang du går hjem i regnet, legg merke til hvor vannet renner. På fortauet følger det gjerne kanten av veien. I et bed eller på en plen kan det i stedet trekke ned i bakken.</p>
+            <p>På en solrik dag kan du prøve den samme turen og legge merke til hvor folk stopper. Kanskje står det en benk under et stort tre, eller kanskje er det meste av skyggen samlet langs én side av gata.</p>
+
+            <div class="topics">
+                <article class="topic">
+                    <h3>Følg skyggen</h3>
+                    <p>Se hvor skyggen treffer om morgenen og om ettermiddagen. Hvor hadde du satt en benk?</p>
+                </article>
+                <article class="topic">
+                    <h3>Følg regnet</h3>
+                    <p>Se etter et sted der vann samler seg, og et sted der det forsvinner ned i bakken.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="content wrap">
+            <h2>Små valg kan gi trærne mer plass</h2>
+            <p>Bed langs fortau, åpne gårdsrom og grøntarealer rundt bygninger kan gi røttene plass til å vokse. Det kan gjøre det lettere å bevare store trær når et område bygges om.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="wrap">
+            <p>Grønne byrom · Fiktiv testside</p>
+        </div>
+    </footer>
+</body>
+</html>
